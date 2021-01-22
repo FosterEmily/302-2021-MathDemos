@@ -13,6 +13,8 @@ public class LerpDemo : MonoBehaviour
     private float animationPlayheadTime = 0;
     private bool isAnimationPlaying = false;
 
+    public AnimationCurve animationCurve;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,27 +27,32 @@ public class LerpDemo : MonoBehaviour
 
         if(isAnimationPlaying)
         {
+            //move playhead forward
             animationPlayheadTime += Time.deltaTime;
-
+            //calc new value for percent
             percent = animationPlayheadTime / animationLength;
+            //clamp in 0 to 1 range
             percent = Mathf.Clamp(percent, 0, 1);
-            DoTheLerp();
-            if (percent >= 1) isAnimationPlaying = false;
 
-            percent = percent * percent * (3 - 2 * percent);
+            float p = animationCurve.Evaluate(percent);
+      
+            //move object to lerped position:
+            DoTheLerp(p);
+            //playing
+            if (percent >= 1) isAnimationPlaying = false;
         }
 
         transform.position = AnimMath.Lerp(objectStart.transform.position, objectEnd.transform.position, percent);
 
     }
 
-    public void DoTheLerp()
+    public void DoTheLerp(float p)
     {
 
         transform.position = AnimMath.Lerp(
             objectStart.transform.position,
             objectEnd.transform.position,
-            percent
+            p
             );
     }
     public void PlayTweenAnim()
