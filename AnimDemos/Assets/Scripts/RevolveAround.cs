@@ -19,7 +19,7 @@ public class RevolveAround : MonoBehaviour
     void Update()
     {
 
-        age += Time.deltaTime;
+        age += Time.deltaTime * HudController.timeScale;
 
         Vector3 offset = new Vector3();
         offset.x = Mathf.Sin(age) * radius;
